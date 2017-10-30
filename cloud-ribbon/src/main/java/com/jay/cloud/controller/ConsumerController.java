@@ -1,5 +1,6 @@
 package com.jay.cloud.controller;
 
+import com.jay.cloud.service.HelloService;
 import com.netflix.discovery.DiscoveryClient;
 import com.netflix.discovery.endpoint.EndpointUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,11 @@ import org.springframework.web.client.RestTemplate;
 public class ConsumerController {
 
     @Autowired
-    private RestTemplate restTemplate;
+    private HelloService helloService;
 
     @RequestMapping(value = "/ribbon-consumer",method = RequestMethod.GET)
     public String helloConsumer(){
-        return restTemplate.getForEntity("http://hello-service/hello",String.class).getBody();
+        return helloService.helloService();
     }
 
 }
