@@ -1,11 +1,13 @@
 package com.jay.cloud.controller;
 
+import com.jay.cloud.bean.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.serviceregistry.Registration;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +33,13 @@ public class HelloController {
         ServiceInstance instance = serviceInstance();
         logger.info("/hello,host:"+instance.getHost()+",service_id"+instance.getServiceId());
         return "hello world";
+    }
+
+    @RequestMapping(value = "/users/{id}",method = RequestMethod.GET)
+    public User users(@PathVariable("id") String name){
+        User user = new User();
+        user.setName(name);
+        return user;
     }
 
     private ServiceInstance serviceInstance() {
