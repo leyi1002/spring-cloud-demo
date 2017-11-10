@@ -4,6 +4,7 @@ import com.jay.cloud.service.HelloService;
 import com.netflix.discovery.DiscoveryClient;
 import com.netflix.discovery.endpoint.EndpointUtils;
 import com.netflix.hystrix.HystrixCircuitBreaker;
+import com.netflix.hystrix.HystrixCollapser;
 import com.netflix.hystrix.HystrixObservableCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;

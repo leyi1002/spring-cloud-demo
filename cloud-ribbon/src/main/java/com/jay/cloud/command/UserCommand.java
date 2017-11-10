@@ -1,10 +1,7 @@
 package com.jay.cloud.command;
 
 import com.jay.cloud.bean.User;
-import com.netflix.hystrix.HystrixCommand;
-import com.netflix.hystrix.HystrixCommandGroupKey;
-import com.netflix.hystrix.HystrixCommandKey;
-import com.netflix.hystrix.HystrixRequestCache;
+import com.netflix.hystrix.*;
 import com.netflix.hystrix.strategy.concurrency.HystrixConcurrencyStrategyDefault;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,8 +13,12 @@ public class UserCommand extends HystrixCommand<User> {
     private RestTemplate restTemplate;
     private String id;
 
-    public UserCommand(Setter setter, RestTemplate restTemplate, String id) {
-        super(setter);
+    public UserCommand(RestTemplate restTemplate, String id) {
+        super(HystrixCommand.Setter
+                .withGroupKey(HystrixCommandGroupKey.Factory.asKey("hello-command"))
+                .andCommandKey(HystrixCommandKey.Factory.asKey("CommandName"))
+                .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("ThreadPoolKey"))
+                .andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(1000)));
         this.restTemplate = restTemplate;
         this.id = id;
     }

@@ -1,6 +1,7 @@
 package com.jay.cloud.controller;
 
 import com.jay.cloud.bean.User;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -40,6 +42,26 @@ public class HelloController {
         User user = new User();
         user.setName(name);
         return user;
+    }
+
+    @RequestMapping(value = "/findAll",method = RequestMethod.GET)
+    public List<User> users1(String ids){
+        List<User> list = new ArrayList<>();
+        if(StringUtils.isNotEmpty(ids)){
+            String[] names = ids.split(",");
+            User user = null;
+            for(int i=0;i <names.length;i++){
+                user = new User();
+                user.setName(names[i]);
+                list.add(user);
+            }
+        }
+        User user = new User();user.setName("a");
+        User user1 = new User();user1.setName("b");
+
+        list.add(user);
+        list.add(user1);
+        return list;
     }
 
     private ServiceInstance serviceInstance() {

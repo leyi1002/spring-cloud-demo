@@ -1,6 +1,7 @@
 package com.jay.cloud.controller;
 
 import com.jay.cloud.bean.User;
+import com.jay.cloud.command.UserCollaperCommand;
 import com.jay.cloud.command.UserCommand;
 import com.jay.cloud.command.UserObserveCommand;
 import com.jay.cloud.service.UserService;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import rx.Observable;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by Administrator on 2017/11/8.
  */
@@ -21,6 +25,7 @@ import rx.Observable;
 public class UserController {
 
 
+    /**************************  命令执行方式  **********************************************************/
     /**
      * 命令方式-发射多个结果
      */
@@ -55,16 +60,43 @@ public class UserController {
 
     @RequestMapping(value = "/user/{name}",method = RequestMethod.GET)
     public User user(@PathVariable("name") String name)throws Exception{
-        HystrixCommand.Setter setter = HystrixCommand.Setter
-                .withGroupKey(HystrixCommandGroupKey.Factory.asKey("hello-command"))
-                .andCommandKey(HystrixCommandKey.Factory.asKey("CommandName"))
-                .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("ThreadPoolKey"))
-                .andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(1000));
-        new UserCommand(setter,restTemplate,name).queue().get();
+        new UserCommand(restTemplate,name).queue().get();
         UserCommand.flushCache("CommandName",name);//清空缓存，下一行命令又会真实调用一次
-        new UserCommand(setter,restTemplate,name).queue().get();
-        return new UserCommand(setter,restTemplate,name).queue().get(); //异步执行
+        new UserCommand(restTemplate,name).queue().get();
+        return new UserCommand(restTemplate,name).queue().get(); //异步执行
     }
 
+    /**************************  请求合并  **********************************************************/
+    /**
+     * 命令方式
+     * @param name
+     * @return
+     */
+    @RequestMapping(value = "/collapser/{name}",method = RequestMethod.GET)
+    public User collapser(@PathVariable("name") String name){
+        User user = new UserCollaperCommand(userService, name).execute();
+        User user1 = new UserCollaperCommand(userService, name).execute();
+        System.out.println(user);
+        return user;
+    }
+
+    /**
+     * 注解方式
+     * @param name
+     * @return
+     */
+    @RequestMapping(value = "/collapserAnnotation/{name}",method = RequestMethod.GET)
+    public User collapserAnnotation(@PathVariable("name") String name){
+        User byAnnotation = userService.findByAnnotation(name);
+        System.out.println(byAnnotation);
+        return byAnnotation;
+    }
+
+    @RequestMapping(value = "/all/{name}",method = RequestMethod.GET)
+    public List<User> all(@PathVariable("name") String name){
+        List<User> all = userService.findAll(Arrays.asList(name));
+        System.out.println(all);
+        return all;
+    }
 
 }
