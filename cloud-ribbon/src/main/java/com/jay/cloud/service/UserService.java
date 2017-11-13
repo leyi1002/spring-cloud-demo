@@ -31,6 +31,7 @@ public class UserService {
     //同步执行
     @HystrixCommand(fallbackMethod = "helloFallback")
     public User helloService(String id){
+//        int i = 10/0;
         return restTemplate.getForObject("http://hello-service/users/{1}",User.class,id);
     }
 
