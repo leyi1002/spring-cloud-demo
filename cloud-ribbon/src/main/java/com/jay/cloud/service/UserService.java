@@ -35,6 +35,13 @@ public class UserService {
         return restTemplate.getForObject("http://hello-service/users/{1}",User.class,id);
     }
 
+    //同步执行
+    @HystrixCommand(fallbackMethod = "helloFallback",threadPoolKey = "userServicePool")
+    public User helloServicePool(String id){
+//        int i = 10/0;
+        return restTemplate.getForObject("http://hello-service/users/{1}",User.class,id);
+    }
+
     //异步执行
     @HystrixCommand(fallbackMethod = "helloFallback")
     public Future<User> helloServiceAsync(String id){

@@ -8,16 +8,15 @@ import org.springframework.web.client.RestTemplate;
 /**
  * Created by Administrator on 2017/11/7.
  */
-public class UserCommand extends HystrixCommand<User> {
+public class UserCommand1 extends HystrixCommand<User> {
 
     private RestTemplate restTemplate;
     private String id;
 
-    public UserCommand(RestTemplate restTemplate, String id) {
-        super(HystrixCommand.Setter
+    public UserCommand1(RestTemplate restTemplate, String id) {
+        super(Setter
                 .withGroupKey(HystrixCommandGroupKey.Factory.asKey("hello-command"))
                 .andCommandKey(HystrixCommandKey.Factory.asKey("UserCommand"))
-                .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("ThreadPoolKey"))
                 .andCommandPropertiesDefaults(HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(1000)));
         this.restTemplate = restTemplate;
         this.id = id;

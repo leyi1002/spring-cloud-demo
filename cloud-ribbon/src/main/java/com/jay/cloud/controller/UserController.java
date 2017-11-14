@@ -3,7 +3,9 @@ package com.jay.cloud.controller;
 import com.jay.cloud.bean.User;
 import com.jay.cloud.command.UserCollaperCommand;
 import com.jay.cloud.command.UserCommand;
+import com.jay.cloud.command.UserCommand1;
 import com.jay.cloud.command.UserObserveCommand;
+import com.jay.cloud.service.ThreadPoolService;
 import com.jay.cloud.service.UserService;
 import com.netflix.discovery.converters.Auto;
 import com.netflix.hystrix.*;
@@ -52,6 +54,21 @@ public class UserController {
 //        return userService.helloServiceAsync(name).get();//   异步执行
     }
 
+    @RequestMapping(value = "/userPool/{name}",method = RequestMethod.GET)
+    public User userPool(@PathVariable("name") String name)throws Exception{
+        User user = userService.helloServicePool(name);
+        return user;
+    }
+
+    @Autowired
+    private ThreadPoolService threadPoolService;
+
+    @RequestMapping(value = "/userThreadPool/{name}",method = RequestMethod.GET)
+    public User threadPoolSay(@PathVariable("name") String name)throws Exception{
+        User user = threadPoolService.sayName(name);
+        return user;
+    }
+
     /**
      * 命令方式-同步、异步发射一个结果
      */
@@ -63,6 +80,11 @@ public class UserController {
         new UserCommand(restTemplate,name).queue().get();
         UserCommand.flushCache("CommandName",name);//清空缓存，下一行命令又会真实调用一次
         new UserCommand(restTemplate,name).queue().get();
+        return new UserCommand(restTemplate,name).queue().get(); //异步执行
+    }
+    @RequestMapping(value = "/userCommand/{name}",method = RequestMethod.GET)
+    public User userCommand(@PathVariable("name") String name)throws Exception{
+        new UserCommand1(restTemplate,name).queue().get();
         return new UserCommand(restTemplate,name).queue().get(); //异步执行
     }
 
