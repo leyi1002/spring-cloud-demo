@@ -1,13 +1,12 @@
 package com.jay.cloud.controller;
 
-import com.jay.cloud.bean.User;
 import com.jay.cloud.command.UserCollaperCommand;
+import com.jay.cloud.bean.User;
 import com.jay.cloud.command.UserCommand;
 import com.jay.cloud.command.UserCommand1;
 import com.jay.cloud.command.UserObserveCommand;
 import com.jay.cloud.service.ThreadPoolService;
 import com.jay.cloud.service.UserService;
-import com.netflix.discovery.converters.Auto;
 import com.netflix.hystrix.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;

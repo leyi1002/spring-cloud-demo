@@ -14,11 +14,11 @@ public interface HelloService {
     String hello();
 
     /**
-     * @RequestParam 必须制定参数名，否则报错
+     * @RequestParam 必须指定参数名，否则报错
      * @param name
      * @return
      */
-    @RequestMapping(value = "hello1",method = RequestMethod.GET)
+    @RequestMapping(value = "/hello1",method = RequestMethod.GET)
     String hello(@RequestParam("name") String name);
 
     /**
@@ -27,10 +27,10 @@ public interface HelloService {
      * @param age
      * @return
      */
-    @RequestMapping(value = "hello2",method = RequestMethod.GET)
+    @RequestMapping(value = "/hello2",method = RequestMethod.GET)
     User hello(@RequestParam("name") String name, @RequestHeader("age") Integer age);
 
-    @RequestMapping(value = "hello3",method = RequestMethod.POST)
-    public String hello(@RequestBody User user);
+    @RequestMapping(value = "/hello3",method = RequestMethod.POST)
+    String hello(@RequestBody User user);
 
 }

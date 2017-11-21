@@ -52,6 +52,11 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.jay.cloud</groupId>
+			<artifactId>cloud-helloservice-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
     <dependencyManagement>
