@@ -49,8 +49,6 @@
 			<groupId>com.jay.cloud</groupId>
 			<artifactId>cloud-helloservice-api</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-			<scope>system</scope>
-			<systemPath>${api.dir}/cloud-helloservice-api-0.0.1-SNAPSHOT.jar</systemPath>
 		</dependency>
 	</dependencies>
 
