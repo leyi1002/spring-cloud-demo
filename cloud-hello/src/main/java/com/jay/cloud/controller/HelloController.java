@@ -1,6 +1,7 @@
 package com.jay.cloud.controller;
 
 import com.jay.cloud.bean.User;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,11 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.serviceregistry.Registration;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -29,6 +34,13 @@ public class HelloController {
 
     @RequestMapping(value = "/hello",method = RequestMethod.GET)
     public String hello(){
+        ServiceInstance instance = serviceInstance();
+        logger.info("/hello,host:"+instance.getHost()+",service_id"+instance.getServiceId());
+        return "hello world";
+    }
+
+    @RequestMapping(value = "/api/hello",method = RequestMethod.GET)
+    public String helloapi(){
         ServiceInstance instance = serviceInstance();
         logger.info("/hello,host:"+instance.getHost()+",service_id"+instance.getServiceId());
         return "hello world";
@@ -74,6 +86,29 @@ public class HelloController {
     @RequestMapping(value = "/hello3",method = RequestMethod.POST)
     public String hello(@RequestBody User user){
         return "hello" + user.getName() + ", " + user.getAge();
+    }
+
+    /**检查登录重定向是否经过网关**/
+    @RequestMapping(value = "/login",method = RequestMethod.GET)
+    public void login(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        String host = request.getHeader("Host");
+        response.addCookie(new Cookie("login","success"));
+        response.sendRedirect("/api-a/loginSuccess?accessToken=1");
+        String location = response.getHeader("Location");
+        logger.info("login------Location: {},Host: {}",location,host);
+    }
+
+    @RequestMapping(value = "/loginSuccess",method = RequestMethod.GET)
+    public String loginSuccess(HttpServletRequest request){
+        String host = request.getHeader("Host");
+        Cookie[] cookies = request.getCookies();
+        for(Cookie c: cookies){
+            if("login".equals(c.getName())){
+                logger.info("cookie bind success");
+            }
+        }
+        logger.info("loginSuccess------ Host: {}",host);
+        return "loginSuccess";
     }
 
     private ServiceInstance serviceInstance() {

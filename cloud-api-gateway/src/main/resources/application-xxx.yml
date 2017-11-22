@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: api-gateway
+server:
+  port: 5555
+zuul:
+  routes:
+    hello-service-v1:
+      path: /hello-service/v1/**
+      serviceId: hello-service-v1
+    hello-service:
+      path: /hello-service/**
+      serviceId: hello-service
+  ignored-services: hello-service
+eureka:
+  client:
+    service-url:
+      defaultZone: http://peer1:1111/eureka/
+
