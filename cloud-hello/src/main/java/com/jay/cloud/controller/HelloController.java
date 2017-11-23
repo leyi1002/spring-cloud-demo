@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -33,7 +34,17 @@ public class HelloController {
     private DiscoveryClient client;
 
     @RequestMapping(value = "/hello",method = RequestMethod.GET)
-    public String hello(){
+    public String hello(Integer s) throws InterruptedException {
+        // 测试api网关的HystrixCommand 执行超时时间
+        if(s != null){
+            if(s == 1){
+                Thread.sleep(1000);
+            }else if(s == 1.5){
+                Thread.sleep(1500);
+            }else if(s == 2){
+                Thread.sleep(2001);
+            }
+        }
         ServiceInstance instance = serviceInstance();
         logger.info("/hello,host:"+instance.getHost()+",service_id"+instance.getServiceId());
         return "hello world";
