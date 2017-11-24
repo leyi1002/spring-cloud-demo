@@ -1,6 +1,8 @@
 package com.jay.cloud.gateway.config;
 
 import com.jay.cloud.gateway.filter.AccessFilter;
+import com.jay.cloud.gateway.filter.FowardFilter;
+import com.jay.cloud.gateway.filter.InfoPostFilter;
 import com.jay.cloud.gateway.filter.NameFilter;
 import org.springframework.cloud.netflix.zuul.filters.discovery.PatternServiceRouteMapper;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,16 @@ public class FilterConfig {
     @Bean
     public NameFilter nameFilter(){
         return new NameFilter();
+    }
+
+    @Bean
+    public FowardFilter fowardFilter(){
+        return new FowardFilter();
+    }
+
+    @Bean
+    public InfoPostFilter infoPostFilter(){
+        return new InfoPostFilter();
     }
 
     @Bean
