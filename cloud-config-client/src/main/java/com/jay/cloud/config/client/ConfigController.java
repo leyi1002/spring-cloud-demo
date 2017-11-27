@@ -26,6 +26,9 @@ public class ConfigController {
     @Autowired
     private Environment env;
 
+    @Value("${encrypt.user}")
+    private String userNum;
+
 
     @RequestMapping("/from")
     public String  from(){
@@ -33,6 +36,12 @@ public class ConfigController {
         log.info("env from :{}",property);
         log.info("value from:{}",this.from);
         return this.from;
+    }
+
+    @RequestMapping("/usernum")
+    public String  usernum(){
+        log.info("userNum :{}",this.userNum);
+        return this.userNum;
     }
 
 }
