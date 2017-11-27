@@ -1,0 +1,22 @@
+server:
+  port: 7001
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          basedir: D:\\rep
+          uri: https://github.com/leyi1002/spring-cloud-demo/
+          search-paths: cloud-config/config-server-hello
+          username: leyi1002@163.com
+          password: 3615377
+encrypt:
+  key-store:
+    location: classpath:config-server.keystore
+    alias: config-server
+    password: 3615377
+    secret: 3615377
+
